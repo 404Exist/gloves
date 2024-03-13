@@ -1,0 +1,276 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My First API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/signup": {
+            "post": {
+                "summary": "Register a new user",
+                "operationId": "2500f2bfa9ff53d36a59135433ccad48",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "User's name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "User's email",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "User's password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "description": "User's password confirm",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "token",
+                                            "type": "string",
+                                            "default": "2|YK3g5VEgtGzNFwStx58axySIJISzX8GOX2edeh6Zb19b3fe7"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "summary": "Login",
+                "operationId": "4ba9291d24c6f0078121629339b1fb36",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "User's email",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "User's password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Correct Credentials to log in",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "token",
+                                            "type": "string",
+                                            "default": "2|YK3g5VEgtGzNFwStx58axySIJISzX8GOX2edeh6Zb19b3fe7"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "summary": "Remove User Tokens",
+                "operationId": "4699fc47b84d0358e273d540e833d930",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer 2|YK3g5VEgtGzNFwStx58axySIJISzX8GOX2edeh6Zb19b3fe7",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User tokens deleted successfully"
+                    },
+                    "422": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "summary": "Get current user",
+                "operationId": "b0b06f47fa4e67c56d9e7124feb578f5",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer 2|YK3g5VEgtGzNFwStx58axySIJISzX8GOX2edeh6Zb19b3fe7",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Current user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/social-auth/{facebook||google||twitter}/redirect-url": {
+            "get": {
+                "summary": "Get social provider redirect url",
+                "operationId": "d2e598142f5eb736d7fff10d482f0d9c",
+                "responses": {
+                    "200": {
+                        "description": "Social provider redirect url",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "default": "https://accounts.google.com/o/oauth2/auth?client_id=458839291603-q6plji6916r260aqfhcoj0dv3m6ds2ho.apps.googleusercontent.com&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Fsocial-auth%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/social-auth/{facebook||google||twitter}/callback": {
+            "get": {
+                "summary": "After sign in successfully with social provider it will redirect you to this url which will return the user and token",
+                "operationId": "982b74e639ea9e45de9b1e77cfe450f5",
+                "responses": {
+                    "200": {
+                        "description": "Correct Credentials to log in",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "token",
+                                            "type": "string",
+                                            "default": "2|YK3g5VEgtGzNFwStx58axySIJISzX8GOX2edeh6Zb19b3fe7"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID of the User",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "Name",
+                        "description": "Name of the User",
+                        "type": "string",
+                        "example": "Gloves"
+                    },
+                    "email": {
+                        "title": "Email",
+                        "description": "Name of the User",
+                        "type": "string",
+                        "example": "gloves@gloves.com"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Created at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2024-02-29T09:55:47.000000Z"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Updated at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2024-02-29T09:55:47.000000Z"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
